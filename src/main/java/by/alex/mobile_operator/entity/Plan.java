@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -17,4 +18,5 @@ public abstract class Plan {
     private String name;
     private BigDecimal basePrice;
     private AddOn addOn;
+    private List<User> users;
 }
