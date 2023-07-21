@@ -1,6 +1,6 @@
-package by.alex.mobile_operator.entity;
+package by.alex.mobile_operator.entity.user;
 
-import by.alex.mobile_operator.enums.Sex;
+import by.alex.mobile_operator.entity.user.enums.Sex;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,19 +1,18 @@
-package by.alex.mobile_operator.entity;
+package by.alex.mobile_operator.entity.plan;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@SuperBuilder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BasePlan extends Plan {
+public class PhonePlan extends InternetPlan {
     private Integer includedMinutes;
+    private Integer minutesToOtherNetworks;
     private Integer includedSMS;
 }
