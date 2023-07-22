@@ -2,11 +2,14 @@ package by.alex.mobile_operator.dao;
 
 import by.alex.mobile_operator.entity.plan.InternetPlan;
 import by.alex.mobile_operator.entity.plan.Plan;
+import by.alex.mobile_operator.entity.planFilter.PlanFilter;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class PlanDao implements CompanyController<Plan, Integer> {
     /**
@@ -64,15 +67,28 @@ public class PlanDao implements CompanyController<Plan, Integer> {
     }
 
     public List<Plan> sortBySubscriptionFee() {
-        return null;
+        return plans.stream()
+                .sorted(Comparator.comparing(Plan::getSubscriptionFee))
+                .collect(Collectors.toList());
     }
 
     public Integer countNumberOfCustomers() {
-        return null;
+        return plans.stream()
+                .mapToInt(plan -> plan.getUsers().size())
+                .sum();
     }
 
-    public Optional<Plan> getPlanByChosenParams(Object... args) {
-        return Optional.empty();
+    public List<Plan> getPlanByChosenPrice(PlanFilter planFilter) {
+        return plans.stream()
+                .filter(plan -> plan.getSubscriptionFee() > planFilter.getSubscriptionFeeFrom()
+                                && plan.getSubscriptionFee() < planFilter.getSubscriptionFeeTo())
+                .collect(Collectors.toList());
+    }
+
+    public List<Plan> getPlanByPlanType(PlanFilter planFilter) {
+        return plans.stream()
+                .filter(plan -> plan.getPlanType().equals(planFilter.getPlanType()))
+                .collect(Collectors.toList());
     }
 
     private void fillDataBase() {
@@ -80,7 +96,14 @@ public class PlanDao implements CompanyController<Plan, Integer> {
                 .id(1)
                 .name("plan1")
                 .subscriptionFee(12.5)
+                .internetTraffic(25)
+                .build());
+        plans.add(InternetPlan.builder()
+                .id(2)
+                .name("plan1")
+                .subscriptionFee(11.5)
                 .internetTraffic(15)
                 .build());
+
     }
 }
