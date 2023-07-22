@@ -8,9 +8,9 @@ public interface CompanyController<E, K> {
 
     Optional<E> getById(K id);
 
-    void delete(K id);
+    boolean delete(K id);
 
-    void update(E entity);
+    boolean update(E entity);
 
-    E save(E entity);
+    boolean save(E entity);
 }
