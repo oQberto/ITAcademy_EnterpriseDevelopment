@@ -1,0 +1,225 @@
+[
+  {
+    "type": "internetPlan",
+    "id": "1",
+    "name": "Plan_1",
+    "subscriptionFee": "10.5",
+    "planType": "INTERNET",
+    "users": [
+      {
+        "id": "1",
+        "role": "USER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "2",
+        "role": "USER",
+        "status": "ACTIVE"
+      }
+    ],
+    "internetTraffic": "15"
+  },
+
+  {
+    "type": "phonePlan",
+    "id": "2",
+    "name": "Plan_2",
+    "subscriptionFee": "17.5",
+    "planType": "PHONE",
+    "users": [
+      {
+        "id": "3",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "4",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      }
+    ],
+    "internetTraffic": "15",
+    "includedMinutes": "600",
+    "minutesToOtherNetworks": "100",
+    "includedSMS": "100"
+  },
+
+  {
+    "type": "tvPlan",
+    "id": "3",
+    "name": "Plan_3",
+    "subscriptionFee": "27.0",
+    "planType": "TV",
+    "users": [
+      {
+        "id": "5",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "6",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "7",
+        "role": "CUSTOMER",
+        "status": "PAUSED"
+      },
+      {
+        "id": "8",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      }
+    ],
+    "internetTraffic": "30",
+    "includedMinutes": "0",
+    "minutesToOtherNetworks": "0",
+    "includedSMS": "0",
+    "tvChannels": "130"
+  },
+
+  {
+    "type": "phonePlan",
+    "id": "4",
+    "name": "Plan_4",
+    "subscriptionFee": "5.5",
+    "planType": "PHONE",
+    "users": [
+      {
+        "id": "9",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "10",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      }
+    ],
+    "internetTraffic": "0",
+    "includedMinutes": "500",
+    "minutesToOtherNetworks": "0",
+    "includedSMS": "0"
+  },
+
+  {
+    "type": "internetPlan",
+    "id": "5",
+    "name": "Plan_5",
+    "subscriptionFee": "19.5",
+    "planType": "INTERNET",
+    "users": [
+      {
+        "id": "11",
+        "role": "USER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "12",
+        "role": "USER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "13",
+        "role": "USER",
+        "status": "ACTIVE"
+      }
+
+    ],
+    "internetTraffic": "20"
+  },
+
+  {
+    "type": "phonePlan",
+    "id": "6",
+    "name": "Plan_6",
+    "subscriptionFee": "9.5",
+    "planType": "PHONE",
+    "users": [
+      {
+        "id": "14",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "15",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "16",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "17",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      }
+    ],
+    "internetTraffic": "2",
+    "includedMinutes": "500",
+    "minutesToOtherNetworks": "0",
+    "includedSMS": "10"
+  },
+
+  {
+    "type": "tvPlan",
+    "id": "6",
+    "name": "Plan_6",
+    "subscriptionFee": "35.0",
+    "planType": "TV",
+    "users": [
+      {
+        "id": "18",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "19",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "20",
+        "role": "CUSTOMER",
+        "status": "PAUSED"
+      },
+      {
+        "id": "23",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      }
+    ],
+    "internetTraffic": "35",
+    "includedMinutes": "200",
+    "minutesToOtherNetworks": "100",
+    "includedSMS": "50",
+    "tvChannels": "180"
+  },
+
+  {
+    "type": "phonePlan",
+    "id": "7",
+    "name": "Plan_7",
+    "subscriptionFee": "15.5",
+    "planType": "PHONE",
+    "users": [
+      {
+        "id": "24",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      },
+      {
+        "id": "25",
+        "role": "CUSTOMER",
+        "status": "ACTIVE"
+      }
+    ],
+    "internetTraffic": "6",
+    "includedMinutes": "500",
+    "minutesToOtherNetworks": "150",
+    "includedSMS": "50"
+  }
+]
