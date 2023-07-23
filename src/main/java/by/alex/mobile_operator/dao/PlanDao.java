@@ -1,9 +1,8 @@
 package by.alex.mobile_operator.dao;
 
-import by.alex.mobile_operator.entity.plan.InternetPlan;
 import by.alex.mobile_operator.entity.plan.Plan;
 import by.alex.mobile_operator.entity.planFilter.PlanFilter;
-import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,16 +10,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
 public class PlanDao implements CompanyController<Plan, Integer> {
+    private static final PlanDao INSTANCE = new PlanDao();
     /**
      * The list works as a database
      */
-    @Getter
     private final List<Plan> plans = new ArrayList<>();
-
-    {
-        fillDataBase();
-    }
 
     @Override
     public List<Plan> getAll() {
@@ -48,22 +46,23 @@ public class PlanDao implements CompanyController<Plan, Integer> {
 
         if (entity.getId().equals(planId)) {
             delete(planId);
-            return save(entity);
+            save(entity);
+            return true;
         }
 
         return false;
     }
 
     @Override
-    public boolean save(Plan entity) {
+    public Plan save(Plan entity) {
         var plan = getById(entity.getId());
 
         if (plan.isEmpty()) {
-            plan.map(plans::add);
-            return true;
+            plans.add(entity);
+            return entity;
         }
 
-        return false;
+        return null;
     }
 
     public List<Plan> sortBySubscriptionFee() {
@@ -91,19 +90,7 @@ public class PlanDao implements CompanyController<Plan, Integer> {
                 .collect(Collectors.toList());
     }
 
-    private void fillDataBase() {
-        plans.add(InternetPlan.builder()
-                .id(1)
-                .name("plan1")
-                .subscriptionFee(12.5)
-                .internetTraffic(25)
-                .build());
-        plans.add(InternetPlan.builder()
-                .id(2)
-                .name("plan1")
-                .subscriptionFee(11.5)
-                .internetTraffic(15)
-                .build());
-
+    public static PlanDao getInstance() {
+        return INSTANCE;
     }
 }

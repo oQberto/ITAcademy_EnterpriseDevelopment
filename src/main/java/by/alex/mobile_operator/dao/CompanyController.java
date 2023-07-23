@@ -12,5 +12,5 @@ public interface CompanyController<E, K> {
 
     boolean update(E entity);
 
-    boolean save(E entity);
+    E save(E entity);
 }
