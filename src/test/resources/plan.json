@@ -8,12 +8,12 @@
     "users": [
       {
         "id": "1",
-        "role": "USER",
+        "role": "CUSTOMER",
         "status": "ACTIVE"
       },
       {
         "id": "2",
-        "role": "USER",
+        "role": "CUSTOMER",
         "status": "ACTIVE"
       }
     ],
@@ -112,17 +112,17 @@
     "users": [
       {
         "id": "11",
-        "role": "USER",
+        "role": "CUSTOMER",
         "status": "ACTIVE"
       },
       {
         "id": "12",
-        "role": "USER",
+        "role": "CUSTOMER",
         "status": "ACTIVE"
       },
       {
         "id": "13",
-        "role": "USER",
+        "role": "CUSTOMER",
         "status": "ACTIVE"
       }
 
@@ -166,7 +166,7 @@
 
   {
     "type": "tvPlan",
-    "id": "6",
+    "id": "7",
     "name": "Plan_6",
     "subscriptionFee": "35.0",
     "planType": "TV",
@@ -187,7 +187,7 @@
         "status": "PAUSED"
       },
       {
-        "id": "23",
+        "id": "21",
         "role": "CUSTOMER",
         "status": "ACTIVE"
       }
@@ -201,18 +201,18 @@
 
   {
     "type": "phonePlan",
-    "id": "7",
+    "id": "8",
     "name": "Plan_7",
     "subscriptionFee": "15.5",
     "planType": "PHONE",
     "users": [
       {
-        "id": "24",
+        "id": "22",
         "role": "CUSTOMER",
         "status": "ACTIVE"
       },
       {
-        "id": "25",
+        "id": "23",
         "role": "CUSTOMER",
         "status": "ACTIVE"
       }

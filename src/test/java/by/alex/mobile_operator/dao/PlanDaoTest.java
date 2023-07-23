@@ -1,44 +1,57 @@
 package by.alex.mobile_operator.dao;
 
 import by.alex.mobile_operator.entity.plan.InternetPlan;
-import by.alex.mobile_operator.entity.plan.PhonePlan;
 import by.alex.mobile_operator.entity.plan.Plan;
-import by.alex.mobile_operator.entity.plan.TVPlan;
 import by.alex.mobile_operator.entity.plan.enums.PlanType;
 import by.alex.mobile_operator.entity.planFilter.PlanFilter;
 import by.alex.mobile_operator.entity.user.User;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import util.FileUtil;
+import util.MapperUtil;
 
+import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlanDaoTest {
     private final PlanDao planDao = PlanDao.getInstance();
+    private static List<Plan> plans;
+
+    @BeforeAll
+    static void initTestData() throws IOException {
+        var testData = FileUtil.readFromFileToString("C:\\Users\\ermak\\IdeaProjects\\ITAcademy_EnterpriseDevelopment\\src\\test\\resources\\plan.json");
+        plans = MapperUtil.map(testData);
+    }
+
+    @BeforeEach
+    void initData() {
+        plans.forEach(planDao::save);
+    }
 
     @Test
     void getAll() {
-        Plan plan1 = planDao.save(getInternetPlan(1));
-        Plan plan2 = planDao.save(getPhonePlan(2));
-        Plan plan3 = planDao.save(getTVPlan(3));
-
         List<Plan> actualResult = planDao.getAll();
-        assertThat(actualResult).hasSize(3);
+        assertThat(actualResult).hasSize(8);
 
         List<Integer> planIds = actualResult.stream()
                 .map(Plan::getId)
                 .toList();
-        assertThat(planIds).contains(plan1.getId(), plan2.getId(), plan3.getId());
+        assertThat(planIds).isEqualTo(plans.stream().map(Plan::getId).toList());
     }
 
     @Test
     void getByIdIfPlanExists() {
-        Plan plan = planDao.save(getPhonePlan(1));
+        Plan plan = plans.get(2);
 
-        Optional<Plan> actualResult = planDao.getById(1);
+        Optional<Plan> actualResult = planDao.getById(3);
 
         assertThat(actualResult).isPresent();
         assertThat(actualResult.get()).isEqualTo(plan);
@@ -46,37 +59,30 @@ class PlanDaoTest {
 
     @Test
     void getByIdIfPlanDoesNotExist() {
-        Plan plan = planDao.save(getInternetPlan(1));
-
-        Optional<Plan> actualResult = planDao.getById(2);
+        Optional<Plan> actualResult = planDao.getById(999);
 
         assertThat(actualResult).isEmpty();
     }
 
     @Test
     void deleteExistingPlan() {
-        Plan plan = planDao.save(getTVPlan(1));
-        Plan plan1 = planDao.save(getInternetPlan(2));
-
-        boolean actualResult = planDao.delete(1);
+        boolean actualResult = planDao.delete(3);
 
         assertThat(actualResult).isTrue();
-        assertThat(planDao.getAll()).hasSize(1);
+        assertThat(planDao.getAll()).hasSize(7);
     }
 
     @Test
     void deleteNotExistingPlan() {
-        Plan plan = planDao.save(getPhonePlan(1));
-
-        boolean actualResult = planDao.delete(2);
+        boolean actualResult = planDao.delete(999);
 
         assertThat(actualResult).isFalse();
-        assertThat(planDao.getAll()).hasSize(1);
+        assertThat(planDao.getAll()).hasSize(8);
     }
 
     @Test
     void updateExistingPlan() {
-        Plan plan = planDao.save(getPhonePlan(1));
+        Plan plan = plans.get(0);
         plan.setSubscriptionFee(9.0);
         plan.setName("Summer Plan");
 
@@ -90,9 +96,8 @@ class PlanDaoTest {
 
     @Test
     void updateNotExistingPlan() {
-        Plan plan1 = planDao.save(getTVPlan(1));
-        Plan plan2 = planDao.save(getInternetPlan(2));
-        planDao.delete(1);
+        Plan plan1 = plans.get(7);
+        planDao.delete(8);
         plan1.setName("New name");
 
         boolean actualResult = planDao.update(plan1);
@@ -104,16 +109,24 @@ class PlanDaoTest {
 
     @Test
     void saveNotExistingPlan() {
-        Plan plan = getInternetPlan(1);
+        Plan plan = InternetPlan.builder()
+                .id(9)
+                .name("Plan9")
+                .subscriptionFee(10.0)
+                .planType(PlanType.INTERNET)
+                .users(List.of(new User(), new User()))
+                .internetTraffic(15)
+                .build();
 
         Plan actualResult = planDao.save(plan);
 
         assertNotNull(actualResult);
+        assertThat(planDao.getAll()).hasSize(9);
     }
 
     @Test
     void saveExistingPlan() {
-        Plan plan = planDao.save(getTVPlan(1));
+        Plan plan = plans.get(0);
 
         Plan actualResult = planDao.save(plan);
 
@@ -122,10 +135,9 @@ class PlanDaoTest {
 
     @Test
     void sortBySubscriptionFee() {
-        Plan plan1 = planDao.save(getInternetPlan(1));
-        Plan plan2 = planDao.save(getPhonePlan(2));
-        Plan plan3 = planDao.save(getTVPlan(3));
-        List<Plan> expectedList = List.of(plan1, plan3, plan2);
+        List<Plan> expectedList = plans.stream()
+                .sorted(Comparator.comparing(Plan::getSubscriptionFee))
+                .collect(Collectors.toList());
 
         List<Plan> actualResult = planDao.sortBySubscriptionFee();
 
@@ -134,101 +146,42 @@ class PlanDaoTest {
 
     @Test
     void countNumberOfCustomers() {
-        Plan plan1 = planDao.save(getInternetPlan(1));
-        Plan plan2 = planDao.save(getPhonePlan(2));
-        Plan plan3 = planDao.save(getTVPlan(3));
-        Integer expectedResult = plan1.getUsers().size()
-                + plan2.getUsers().size()
-                + plan3.getUsers().size();
-
         Integer actualResult = planDao.countNumberOfCustomers();
 
-        assertThat(actualResult).isEqualTo(expectedResult);
+        assertThat(actualResult).isEqualTo(23);
     }
 
     @Test
     void getPlanByChosenPrice() {
-        Plan plan1 = planDao.save(getInternetPlan(1));
-        Plan plan2 = planDao.save(getPhonePlan(2));
-        Plan plan3 = planDao.save(getTVPlan(3));
-        Plan plan4 = planDao.save(getTVPlan(4));
-
         List<Plan> actualResult = planDao.getPlanByChosenPrice(getPlanFilter());
         assertThat(actualResult).hasSize(2);
 
         List<Integer> plansIds = actualResult.stream()
                 .map(Plan::getId)
                 .toList();
-        assertThat(plansIds).contains(plan3.getId(), plan4.getId());
+        assertThat(plansIds).contains(1, 8);
     }
 
     @Test
     void getPlanByPlanType() {
-        Plan plan1 = planDao.save(getInternetPlan(1));
-        Plan plan2 = planDao.save(getPhonePlan(2));
-        Plan plan3 = planDao.save(getTVPlan(3));
-        Plan plan4 = planDao.save(getPhonePlan(4));
-        Plan plan5 = planDao.save(getInternetPlan(5));
-        Plan plan6 = planDao.save(getPhonePlan(6));
-
         List<Plan> actualResult = planDao.getPlanByPlanType(getPlanFilter());
-        assertThat(actualResult).hasSize(3);
+        assertThat(actualResult).hasSize(4);
 
         List<Integer> plansIds = actualResult.stream()
                 .map(Plan::getId)
                 .toList();
-        assertThat(plansIds).contains(plan2.getId(), plan4.getId(), plan6.getId());
+        assertThat(plansIds).contains(2, 4, 6, 8);
     }
 
-    @BeforeEach
+    @AfterEach
     void cleanData() {
         planDao.getAll().clear();
     }
 
-    private Plan getInternetPlan(Integer id) {
-        return InternetPlan.builder()
-                .id(id)
-                .name("Plan1")
-                .subscriptionFee(10.0)
-                .planType(PlanType.INTERNET)
-                .users(List.of(new User(), new User()))
-                .internetTraffic(15)
-                .build();
-    }
-
-    private Plan getPhonePlan(Integer id) {
-        return PhonePlan.builder()
-                .id(id)
-                .name("Plan2")
-                .subscriptionFee(17.5)
-                .planType(PlanType.PHONE)
-                .users(List.of(new User()))
-                .internetTraffic(25)
-                .includedMinutes(600)
-                .minutesToOtherNetworks(100)
-                .includedSMS(100)
-                .build();
-    }
-
-    private Plan getTVPlan(Integer id) {
-        return TVPlan.builder()
-                .id(id)
-                .name("Plan2")
-                .subscriptionFee(13.5)
-                .planType(PlanType.TV)
-                .users(List.of(new User(), new User(), new User()))
-                .internetTraffic(25)
-                .includedMinutes(600)
-                .minutesToOtherNetworks(100)
-                .includedSMS(100)
-                .tvChannels(150)
-                .build();
-    }
-
     private PlanFilter getPlanFilter() {
         return PlanFilter.builder()
-                .subscriptionFeeFrom(10.5)
-                .subscriptionFeeTo(15.0)
+                .subscriptionFeeFrom(10.0)
+                .subscriptionFeeTo(16.0)
                 .planType(PlanType.PHONE)
                 .build();
     }
