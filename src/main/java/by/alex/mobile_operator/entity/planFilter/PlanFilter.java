@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class PlanFilter {
-    private Integer subscriptionFeeFrom;
-    private Integer subscriptionFeeTo;
+    private Double subscriptionFeeFrom;
+    private Double subscriptionFeeTo;
     private PlanType planType;
 }
