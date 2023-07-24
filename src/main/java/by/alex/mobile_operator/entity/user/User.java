@@ -1,5 +1,6 @@
 package by.alex.mobile_operator.entity.user;
 
+import by.alex.mobile_operator.entity.plan.Plan;
 import by.alex.mobile_operator.entity.user.enums.Role;
 import by.alex.mobile_operator.entity.user.enums.Status;
 import lombok.AllArgsConstructor;
@@ -16,4 +17,5 @@ public class User {
     private Role role;
     private Info info;
     private Status status;
+    private Plan plan;
 }
