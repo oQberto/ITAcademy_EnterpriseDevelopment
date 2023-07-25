@@ -139,7 +139,7 @@ class PlanDaoTest {
                 .sorted(Comparator.comparing(Plan::getSubscriptionFee))
                 .collect(Collectors.toList());
 
-        List<Plan> actualResult = planDao.sortBySubscriptionFee();
+        List<Plan> actualResult = planDao.sortBySubscriptionFeeAscending();
 
         assertEquals(actualResult, expectedList);
     }
