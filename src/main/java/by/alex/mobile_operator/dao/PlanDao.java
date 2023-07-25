@@ -65,6 +65,12 @@ public class PlanDao implements CompanyController<Plan, Integer> {
         return null;
     }
 
+    public Optional<Plan> getPlanByName(String name) {
+        return plans.stream()
+                .filter(plan -> plan.getName().equals(name))
+                .findFirst();
+    }
+
     public List<Plan> sortBySubscriptionFeeAscending() {
         return plans.stream()
                 .sorted(Comparator.comparing(Plan::getSubscriptionFee))

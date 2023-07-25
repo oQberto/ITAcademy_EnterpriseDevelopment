@@ -3,6 +3,7 @@ package by.alex.mobile_operator.service;
 import by.alex.mobile_operator.entity.plan.Plan;
 import by.alex.mobile_operator.entity.plan.enums.PlanType;
 import by.alex.mobile_operator.entity.planFilter.PlanFilter;
+import by.alex.mobile_operator.entity.user.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +13,10 @@ import java.util.List;
 public class UIService {
     private final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     private final ConsoleService consoleService = new ConsoleService();
+    private final UserService userService = UserService.getInstance();
+    private User user;
     private boolean isActive = true;
+    private boolean isLogged = false;
     private String userInput;
 
     public void start() throws IOException {
@@ -21,15 +25,15 @@ public class UIService {
                 You can :
                     1. Browse the catalogue of the plans;
                     2. Sort plans by price or type;
-                    3. Select one plan and connect it to your account;
-                    4. Login and rule your profile.
+                    3. Select one plan and connect it to your account (only if logged-in);
+                    4. Login and rule your profile (only if logged-in).
                 """);
         while (isActive) {
             System.out.println("You're on the main page.");
             switch (bufferedReader.readLine()) {
                 case "1" -> browseCatalogueOfThePlans().forEach(System.out::println);
                 case "2" -> sortPlans();
-                case "3" -> System.out.println();
+                case "3" -> connectPlanToAccount(selectPlan());
                 case "4" -> System.out.println();
             }
 
@@ -102,6 +106,21 @@ public class UIService {
 
         return planType;
     }
+
+    private void connectPlanToAccount(Plan plan) {
+        if (!isLogged) {
+            user.setPlan(plan);
+            userService.updateUser(user);
+        }
+    }
+
+    private Plan selectPlan() throws IOException {
+        System.out.println("Choose the name of the plan you like: ");
+
+        return consoleService.getPlanByName(bufferedReader.readLine())
+                .orElse(null);
+    }
+
 
     @Deprecated
     private PlanFilter buildplanFilter() throws IOException {

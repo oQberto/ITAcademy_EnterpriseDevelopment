@@ -10,14 +10,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 public class ConsoleService {
-    PlanDao planDao = PlanDao.getInstance();
+    private final PlanDao planDao = PlanDao.getInstance();
 
     {
         initPlans();
     }
 
+    public Optional<Plan> getPlanByName(String name) {
+        return planDao.getPlanByName(name);
+    }
 
     public List<Plan> browseCatalogue() {
         return planDao.getAll();

@@ -62,7 +62,7 @@ public class UserDao implements CompanyController<User, Integer> {
         return null;
     }
 
-    private static UserDao getInstance() {
+    public static UserDao getInstance() {
         return INSTANCE;
     }
 }
