@@ -33,8 +33,10 @@ public class UIService {
             switch (bufferedReader.readLine()) {
                 case "1" -> browseCatalogueOfThePlans().forEach(System.out::println);
                 case "2" -> sortPlans();
-                case "3" -> connectPlanToAccount(selectPlan());
+                case "3" -> connectPlanToAccount();
                 case "4" -> System.out.println();
+                case "exit" -> isActive = false;
+                default -> System.err.println("Wrong input! Check your data.");
             }
 
         }
@@ -107,10 +109,12 @@ public class UIService {
         return planType;
     }
 
-    private void connectPlanToAccount(Plan plan) {
-        if (!isLogged) {
-            user.setPlan(plan);
+    private void connectPlanToAccount() throws IOException {
+        if (isLogged) {
+            user.setPlan(selectPlan());
             userService.updateUser(user);
+        } else {
+            System.out.println("Login or register and try again.");
         }
     }
 
