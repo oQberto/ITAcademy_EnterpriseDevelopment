@@ -11,6 +11,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class TVPlan extends PhonePlan {
+public class TVPlan extends InternetPlan {
     private Integer tvChannels;
 }

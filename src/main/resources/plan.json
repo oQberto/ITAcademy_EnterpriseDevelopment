@@ -1,0 +1,87 @@
+[
+  {
+    "type": "internetPlan",
+    "id": 1,
+    "name": "Plan_1",
+    "subscriptionFee": 10.5,
+    "planType": "INTERNET",
+    "internetTraffic": 15
+  },
+
+  {
+    "type": "phonePlan",
+    "id": 2,
+    "name": "Plan_2",
+    "subscriptionFee": 17.5,
+    "planType": "PHONE",
+    "internetTraffic": 15,
+    "includedMinutes": 600,
+    "minutesToOtherNetworks": 100,
+    "includedSMS": 100
+  },
+
+  {
+    "type": "tvPlan",
+    "id": 3,
+    "name": "Plan_3",
+    "subscriptionFee": 27.0,
+    "planType": "TV",
+    "internetTraffic": 30,
+    "tvChannels": 130
+  },
+
+  {
+    "type": "phonePlan",
+    "id": 4,
+    "name": "Plan_4",
+    "subscriptionFee": 5.5,
+    "planType": "PHONE",
+    "internetTraffic": 0,
+    "includedMinutes": 500,
+    "minutesToOtherNetworks": 0,
+    "includedSMS": 0
+  },
+
+  {
+    "type": "internetPlan",
+    "id": 5,
+    "name": "Plan_5",
+    "subscriptionFee": 19.5,
+    "planType": "INTERNET",
+    "internetTraffic": 20
+  },
+
+  {
+    "type": "phonePlan",
+    "id": 6,
+    "name": "Plan_6",
+    "subscriptionFee": 9.5,
+    "planType": "PHONE",
+    "internetTraffic": 2,
+    "includedMinutes": 500,
+    "minutesToOtherNetworks": 0,
+    "includedSMS": 10
+  },
+
+  {
+    "type": "tvPlan",
+    "id": "7",
+    "name": "Plan_6",
+    "subscriptionFee": 35.0,
+    "planType": "TV",
+    "internetTraffic": 35,
+    "tvChannels": 180
+  },
+
+  {
+    "type": "phonePlan",
+    "id": 8,
+    "name": "Plan_7",
+    "subscriptionFee": 15.5,
+    "planType": "PHONE",
+    "internetTraffic": 6,
+    "includedMinutes": 500,
+    "minutesToOtherNetworks": 150,
+    "includedSMS": 50
+  }
+]

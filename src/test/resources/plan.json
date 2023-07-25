@@ -73,9 +73,6 @@
       }
     ],
     "internetTraffic": "30",
-    "includedMinutes": "0",
-    "minutesToOtherNetworks": "0",
-    "includedSMS": "0",
     "tvChannels": "130"
   },
 
@@ -193,9 +190,6 @@
       }
     ],
     "internetTraffic": "35",
-    "includedMinutes": "200",
-    "minutesToOtherNetworks": "100",
-    "includedSMS": "50",
     "tvChannels": "180"
   },
 
