@@ -3,12 +3,16 @@ package by.alex.mobile_operator.service;
 import by.alex.mobile_operator.entity.plan.Plan;
 import by.alex.mobile_operator.entity.plan.enums.PlanType;
 import by.alex.mobile_operator.entity.planFilter.PlanFilter;
+import by.alex.mobile_operator.entity.user.Info;
 import by.alex.mobile_operator.entity.user.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 public class UIService {
     private final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -34,7 +38,7 @@ public class UIService {
                 case "1" -> browseCatalogueOfThePlans().forEach(System.out::println);
                 case "2" -> sortPlans();
                 case "3" -> connectPlanToAccount();
-                case "4" -> System.out.println();
+                case "4" -> authenticate();
                 case "exit" -> isActive = false;
                 default -> System.err.println("Wrong input! Check your data.");
             }
@@ -125,6 +129,73 @@ public class UIService {
                 .orElse(null);
     }
 
+    private void authenticate() throws IOException {
+        System.out.println("""
+                Login or register:
+                    1. Login;
+                    2. Register.
+                """);
+        switch (bufferedReader.readLine()) {
+            case "1" -> login();
+            case "2" -> register();
+        }
+    }
+
+    private void register() throws IOException {
+        var isActiveRegistration = true;
+        user = User.builder()
+                .info(new Info())
+                .build();
+        System.out.println("""
+                Input your data:
+                    1. Name;
+                    2. Surname;
+                    3. Passport number;
+                    4. Birthday (yyyy-mm-dd);
+                    5. Password;
+                    6. Finish registration;
+                    7. Go back to main menu;
+                """);
+
+        while (isActiveRegistration) {
+            switch (bufferedReader.readLine()) {
+                case "1" -> user.getInfo().setName(bufferedReader.readLine());
+                case "2" -> user.getInfo().setSurname(bufferedReader.readLine());
+                case "3" -> user.getInfo().setPassportNo(bufferedReader.readLine());
+                case "4" -> user.getInfo().setBirthday(
+                        LocalDate.parse(
+                                bufferedReader.readLine(),
+                                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        )
+                );
+                case "5" -> user.getInfo().setPassword(bufferedReader.readLine());
+                case "6" -> finishRegistration();
+                case "7" -> isActiveRegistration = false;
+                default -> System.err.println("Wrong input! Check your data.");
+            }
+        }
+    }
+
+    private void finishRegistration() {
+        if (user.getInfo().getName() != null
+                && user.getInfo().getPassword() !=null) {
+            userService.saveUser(user);
+            isLogged = true;
+        } else {
+            System.err.println("If you want to finish registration, you should input username and password.");
+        }
+    }
+
+    private void login() throws IOException {
+        System.out.println("Input username and password:");
+
+        var username = bufferedReader.readLine();
+        var password = bufferedReader.readLine();
+        Optional<User> activeUser = userService.login(username, password);
+        activeUser.ifPresentOrElse(
+                value -> user = value,
+                () -> System.err.println("Wrong username or password! Try again or register."));
+    }
 
     @Deprecated
     private PlanFilter buildplanFilter() throws IOException {

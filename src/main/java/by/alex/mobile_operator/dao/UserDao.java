@@ -62,6 +62,13 @@ public class UserDao implements CompanyController<User, Integer> {
         return null;
     }
 
+    public Optional<User> findByUsernameAndPassword(String username, String password) {
+        return users.stream()
+                .filter(user -> user.getInfo().getName().equals(username)
+                        && user.getInfo().getPassword().equals(password))
+                .findFirst();
+    }
+
     public static UserDao getInstance() {
         return INSTANCE;
     }

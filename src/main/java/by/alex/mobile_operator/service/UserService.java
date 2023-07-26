@@ -4,6 +4,8 @@ import by.alex.mobile_operator.dao.UserDao;
 import by.alex.mobile_operator.entity.user.User;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
+
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -13,6 +15,14 @@ public class UserService {
 
     public boolean updateUser(User user) {
         return userDao.update(user);
+    }
+
+    public Optional<User> login(String username, String password) {
+        return userDao.findByUsernameAndPassword(username, password);
+    }
+
+    public boolean saveUser(User user) {
+        return userDao.save(user) != null;
     }
 
     public static UserService getInstance() {

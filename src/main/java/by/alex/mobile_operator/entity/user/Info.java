@@ -1,6 +1,5 @@
 package by.alex.mobile_operator.entity.user;
 
-import by.alex.mobile_operator.entity.user.enums.Sex;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,10 +13,9 @@ import java.time.LocalDate;
 @Builder
 public class Info {
     private Integer id;
-    private Long passportNo;
+    private String passportNo;
+    private String password;
     private String name;
-    private String secondName;
     private String surname;
     private LocalDate birthday;
-    private Sex sex;
 }
