@@ -18,11 +18,6 @@ public class UserDao implements CompanyController<User, Integer> {
      */
     private final List<User> users = new ArrayList<>();
 
-    /**
-     * A number similar to an "SERIAL" in a database.
-     */
-    private Integer userId = 0;
-
     @Override
     public List<User> getAll() {
         return users;
@@ -61,7 +56,6 @@ public class UserDao implements CompanyController<User, Integer> {
         var user = getById(entity.getId());
 
         if (user.isEmpty()) {
-            entity.setId(userId++);
             users.add(entity);
             return entity;
         }
