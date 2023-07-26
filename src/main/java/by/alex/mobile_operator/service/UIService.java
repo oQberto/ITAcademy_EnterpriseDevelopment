@@ -29,7 +29,9 @@ public class UIService {
                     1. Browse the catalogue of the plans;
                     2. Sort plans by price or type;
                     3. Select one plan and connect it to your account (only if logged-in);
-                    4. Login and rule your profile (only if logged-in).
+                    4. Login and rule your profile (only if logged-in);
+                    5. Browse your profile (only if logged-in);
+                    6. Logout.
                 """);
         while (isActive) {
             System.out.println("You're on the main page.");
@@ -38,6 +40,7 @@ public class UIService {
                 case "2" -> sortPlans();
                 case "3" -> connectPlanToAccount();
                 case "4" -> authenticate();
+                case "6" -> logout();
                 case "exit" -> isActive = false;
                 default -> System.err.println("Wrong input! Check your data.");
             }
@@ -192,5 +195,15 @@ public class UIService {
         activeUser.ifPresentOrElse(
                 value -> user = value,
                 () -> System.err.println("Wrong username or password! Try again or register."));
+    }
+
+    private void logout() {
+        if (isLogged) {
+            user = null;
+            isLogged = false;
+            System.out.println("You logged-out.");
+        } else {
+            System.out.println("You didn't login.");
+        }
     }
 }
