@@ -15,7 +15,7 @@ public class Message {
                     4. Login and rule your profile (only if logged-in);
                     5. Browse your profile (only if logged-in);
                     6. Logout;
-                    "exit" -> End session.
+                    "exit" -> end session.
                 """;
         public static final String MAIN_PAGE = "You're on the main page.";
         public static final String SORTING = """
@@ -25,7 +25,7 @@ public class Message {
                     2. Sort by price descending (doesn't work);
                     3. Sort by price range;
                     4. Sort by type.
-                    "back" -> come back;
+                    "back" -> back to the main page.
                 """;
         public static final String SORTING_BY_PRICE = "Choose the range: from ___ to ___.";
         public static final String SORTING_BY_PLAN_TYPE = """
@@ -33,14 +33,14 @@ public class Message {
                     1. Internet plans;
                     2. Phone plans;
                     3. TV plans;
-                    "back" -> come back.
+                    "back" -> back to the sort page.
                 """;
         public static final String PLAN_SELECTION = "Choose the name of the plan you like: ";
         public static final String AUTHENTICATION = """
                 Login or register:
                     1. Login;
-                    2. Register.
-                    "back" -> come back
+                    2. Register;
+                    "back" -> back to the main page.
                 """;
         public static final String LOGIN = "Input username and password: ";
         public static final String REGISTRATION = """
@@ -51,7 +51,7 @@ public class Message {
                     4. Birthday (yyyy-mm-dd);
                     5. Password;
                     6. Finish registration;
-                    "back" -> come back.
+                    "back" -> back to the authentication page.
                 """;
     }
 
