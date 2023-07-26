@@ -14,6 +14,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import static by.alex.mobile_operator.util.Message.Error.*;
+import static by.alex.mobile_operator.util.Message.Instruction.*;
+import static by.alex.mobile_operator.util.Message.SystemMessage.LOGOUT;
+import static by.alex.mobile_operator.util.Message.printErrorMessage;
+import static by.alex.mobile_operator.util.Message.printInstructionMessage;
+
 public class UIService {
     private final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     private final PlanService consoleService = PlanService.getInstance();
@@ -23,18 +29,9 @@ public class UIService {
     private User user;
 
     public void start() throws IOException {
-        System.out.println("Hi!");
-        System.out.println("""
-                You can :
-                    1. Browse the catalogue of the plans;
-                    2. Sort plans by price or type;
-                    3. Select one plan and connect it to your account (only if logged-in);
-                    4. Login and rule your profile (only if logged-in);
-                    5. Browse your profile (only if logged-in);
-                    6. Logout.
-                """);
+        printInstructionMessage(INTRODUCTION);
         while (isActive) {
-            System.out.println("You're on the main page.");
+            printInstructionMessage(MAIN_PAGE);
             switch (bufferedReader.readLine()) {
                 case "1" -> browseCatalogueOfThePlans().forEach(System.out::println);
                 case "2" -> sortPlans();
@@ -43,7 +40,7 @@ public class UIService {
                 case "5" -> browseProfile();
                 case "6" -> logout();
                 case "exit" -> isActive = false;
-                default -> System.err.println("Wrong input! Check your data.");
+                default -> printErrorMessage(WRONG_INPUT);
             }
 
         }
@@ -54,13 +51,7 @@ public class UIService {
     }
 
     private void sortPlans() throws IOException {
-        System.out.println("""
-                Choose sorting type:
-                    1. Sort by price ascending;
-                    2. Sort by price descending (doesn't work);
-                    3. Sort by price range;
-                    4. Sort by type.
-                """);
+        printInstructionMessage(SORTING);
 
         switch (bufferedReader.readLine()) {
             case "1" -> sortByPriceAscending().forEach(System.out::println);
@@ -79,7 +70,7 @@ public class UIService {
     }
 
     private List<Plan> sortByPriceRange() throws IOException {
-        System.out.println("Choose the range: from ___ to ___.");
+        printInstructionMessage(SORTING_BY_PRICE);
         PlanFilter planFilter = PlanFilter.builder()
                 .subscriptionFeeFrom(Double.parseDouble(bufferedReader.readLine()))
                 .subscriptionFeeTo(Double.parseDouble(bufferedReader.readLine()))
@@ -89,12 +80,7 @@ public class UIService {
     }
 
     private List<Plan> sortCatalogueByPlanType() throws IOException {
-        System.out.println("""
-                Select interested plan:
-                    1. Internet plans;
-                    2. Phone plans;
-                    3. TV plans.
-                """);
+        printInstructionMessage(SORTING_BY_PLAN_TYPE);
         PlanFilter planFilter = PlanFilter.builder()
                 .planType(selectPlanType())
                 .build();
@@ -119,23 +105,19 @@ public class UIService {
             user.setPlan(selectPlan());
             userService.updateUser(user);
         } else {
-            System.out.println("Login or register and try again.");
+            printErrorMessage(NOT_LOGGED_IN);
         }
     }
 
     private Plan selectPlan() throws IOException {
-        System.out.println("Choose the name of the plan you like: ");
+        printInstructionMessage(PLAN_SELECTION);
 
         return consoleService.getPlanByName(bufferedReader.readLine())
                 .orElse(null);
     }
 
     private void authenticate() throws IOException {
-        System.out.println("""
-                Login or register:
-                    1. Login;
-                    2. Register.
-                """);
+        printInstructionMessage(AUTHENTICATION);
         switch (bufferedReader.readLine()) {
             case "1" -> login();
             case "2" -> register();
@@ -147,16 +129,7 @@ public class UIService {
         user = User.builder()
                 .info(new Info())
                 .build();
-        System.out.println("""
-                Input your data:
-                    1. Name;
-                    2. Surname;
-                    3. Passport number;
-                    4. Birthday (yyyy-mm-dd);
-                    5. Password;
-                    6. Finish registration;
-                    7. Go back to main menu;
-                """);
+        printInstructionMessage(REGISTRATION);
 
         while (isActiveRegistration) {
             switch (bufferedReader.readLine()) {
@@ -172,7 +145,7 @@ public class UIService {
                 case "5" -> user.getInfo().setPassword(bufferedReader.readLine());
                 case "6" -> finishRegistration();
                 case "7" -> isActiveRegistration = false;
-                default -> System.err.println("Wrong input! Check your data.");
+                default -> printErrorMessage(WRONG_INPUT);
             }
         }
     }
@@ -183,26 +156,26 @@ public class UIService {
             userService.saveUser(user);
             isLogged = true;
         } else {
-            System.err.println("If you want to finish registration, you should input username and password.");
+            printErrorMessage(FAIL_REGISTRATION);
         }
     }
 
     private void login() throws IOException {
-        System.out.println("Input username and password:");
+        printInstructionMessage(LOGIN);
 
         var username = bufferedReader.readLine();
         var password = bufferedReader.readLine();
         Optional<User> activeUser = userService.login(username, password);
         activeUser.ifPresentOrElse(
                 value -> user = value,
-                () -> System.err.println("Wrong username or password! Try again or register."));
+                () -> printErrorMessage(FAIL_LOGIN));
     }
 
     private void browseProfile() {
         if (!isLogged) {
             System.out.println(userService.showInfo(user));
         } else {
-            System.out.println("If you want to browse a profile, you should login.");
+            printErrorMessage(BROWSE_ERROR);
         }
     }
 
@@ -210,9 +183,9 @@ public class UIService {
         if (isLogged) {
             user = null;
             isLogged = false;
-            System.out.println("You logged-out.");
+            printInstructionMessage(LOGOUT);
         } else {
-            System.out.println("You didn't login.");
+            printErrorMessage(LOGIN_ERROR);
         }
     }
 }
