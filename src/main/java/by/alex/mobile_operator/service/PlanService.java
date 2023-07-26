@@ -5,6 +5,7 @@ import by.alex.mobile_operator.entity.plan.Plan;
 import by.alex.mobile_operator.entity.planFilter.PlanFilter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,7 +13,11 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-public class ConsoleService {
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
+public class PlanService {
+    private static final PlanService INSTANCE = new PlanService();
     private final PlanDao planDao = PlanDao.getInstance();
 
     {
@@ -55,5 +60,9 @@ public class ConsoleService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static PlanService getInstance() {
+        return INSTANCE;
     }
 }

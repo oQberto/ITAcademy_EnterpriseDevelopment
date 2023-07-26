@@ -16,12 +16,11 @@ import java.util.Optional;
 
 public class UIService {
     private final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-    private final ConsoleService consoleService = new ConsoleService();
+    private final PlanService consoleService = PlanService.getInstance();
     private final UserService userService = UserService.getInstance();
-    private User user;
     private boolean isActive = true;
     private boolean isLogged = false;
-    private String userInput;
+    private User user;
 
     public void start() throws IOException {
         System.out.println("Hi!");
@@ -59,9 +58,7 @@ public class UIService {
                     4. Sort by type.
                 """);
 
-        userInput = bufferedReader.readLine();
-
-        switch (userInput) {
+        switch (bufferedReader.readLine()) {
             case "1" -> sortByPriceAscending().forEach(System.out::println);
             case "2" -> sortByPriceDescending().forEach(System.out::println);
             case "3" -> sortByPriceRange().forEach(System.out::println);
