@@ -16,6 +16,7 @@ public class UserDao implements CompanyController<User, Integer> {
      * The list works sa a database
      */
     private final List<User> users = new ArrayList<>();
+    private Integer userId = 0;
 
     @Override
     public List<User> getAll() {
@@ -55,6 +56,7 @@ public class UserDao implements CompanyController<User, Integer> {
         var user = getById(entity.getId());
 
         if (user.isEmpty()) {
+            entity.setId(userId++);
             users.add(entity);
             return entity;
         }

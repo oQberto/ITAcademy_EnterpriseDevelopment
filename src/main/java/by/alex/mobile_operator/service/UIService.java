@@ -17,6 +17,7 @@ import java.util.Optional;
 import static by.alex.mobile_operator.util.Message.Error.*;
 import static by.alex.mobile_operator.util.Message.Instruction.*;
 import static by.alex.mobile_operator.util.Message.SystemMessage.LOGOUT;
+import static by.alex.mobile_operator.util.Message.UserInput.BACK;
 import static by.alex.mobile_operator.util.Message.printErrorMessage;
 import static by.alex.mobile_operator.util.Message.printInstructionMessage;
 
@@ -25,13 +26,16 @@ public class UIService {
     private final PlanService consoleService = PlanService.getInstance();
     private final UserService userService = UserService.getInstance();
     private boolean isActive = true;
+    private boolean isActiveAction = true;
     private boolean isLogged = false;
     private User user;
 
     public void start() throws IOException {
         printInstructionMessage(INTRODUCTION);
+
         while (isActive) {
             printInstructionMessage(MAIN_PAGE);
+
             switch (bufferedReader.readLine()) {
                 case "1" -> browseCatalogueOfThePlans().forEach(System.out::println);
                 case "2" -> sortPlans();
@@ -42,7 +46,6 @@ public class UIService {
                 case "exit" -> isActive = false;
                 default -> printErrorMessage(WRONG_INPUT);
             }
-
         }
     }
 
@@ -52,12 +55,17 @@ public class UIService {
 
     private void sortPlans() throws IOException {
         printInstructionMessage(SORTING);
+        isActiveAction = true;
 
-        switch (bufferedReader.readLine()) {
-            case "1" -> sortByPriceAscending().forEach(System.out::println);
-            case "2" -> sortByPriceDescending().forEach(System.out::println);
-            case "3" -> sortByPriceRange().forEach(System.out::println);
-            case "4" -> sortCatalogueByPlanType().forEach(System.out::println);
+        while (isActiveAction) {
+            switch (bufferedReader.readLine()) {
+                case "1" -> sortByPriceAscending().forEach(System.out::println);
+                case "2" -> sortByPriceDescending().forEach(System.out::println);
+                case "3" -> sortByPriceRange().forEach(System.out::println);
+                case "4" -> sortCatalogueByPlanType().forEach(System.out::println);
+                case "back" -> isActiveAction = false;
+                default -> printErrorMessage(WRONG_INPUT);
+            }
         }
     }
 
@@ -91,10 +99,14 @@ public class UIService {
     private PlanType selectPlanType() throws IOException {
         PlanType planType = null;
 
-        switch (bufferedReader.readLine()) {
-            case "1" -> planType = PlanType.INTERNET;
-            case "2" -> planType = PlanType.PHONE;
-            case "3" -> planType = PlanType.TV;
+        while (isActiveAction) {
+            switch (bufferedReader.readLine()) {
+                case "1" -> planType = PlanType.INTERNET;
+                case "2" -> planType = PlanType.PHONE;
+                case "3" -> planType = PlanType.TV;
+                case "back" -> sortPlans();
+                default -> printErrorMessage(WRONG_INPUT);
+            }
         }
 
         return planType;
@@ -111,27 +123,37 @@ public class UIService {
 
     private Plan selectPlan() throws IOException {
         printInstructionMessage(PLAN_SELECTION);
+        Optional<Plan> plan = consoleService.getPlanByName(bufferedReader.readLine());
 
-        return consoleService.getPlanByName(bufferedReader.readLine())
-                .orElse(null);
+        while (plan.isEmpty()) {
+            printErrorMessage(PLAN_NOT_EXISTS);
+            plan = consoleService.getPlanByName(bufferedReader.readLine());
+        }
+
+        return plan.get();
     }
 
     private void authenticate() throws IOException {
         printInstructionMessage(AUTHENTICATION);
-        switch (bufferedReader.readLine()) {
-            case "1" -> login();
-            case "2" -> register();
+        isActiveAction = true;
+
+        while (isActiveAction) {
+            switch (bufferedReader.readLine()) {
+                case "1" -> login();
+                case "2" -> register();
+                case BACK -> isActiveAction = false;
+                default -> printErrorMessage(WRONG_INPUT);
+            }
         }
     }
 
     private void register() throws IOException {
-        var isActiveRegistration = true;
         user = User.builder()
                 .info(new Info())
                 .build();
         printInstructionMessage(REGISTRATION);
 
-        while (isActiveRegistration) {
+        while (isActiveAction) {
             switch (bufferedReader.readLine()) {
                 case "1" -> user.getInfo().setName(bufferedReader.readLine());
                 case "2" -> user.getInfo().setSurname(bufferedReader.readLine());
@@ -144,7 +166,7 @@ public class UIService {
                 );
                 case "5" -> user.getInfo().setPassword(bufferedReader.readLine());
                 case "6" -> finishRegistration();
-                case "7" -> isActiveRegistration = false;
+                case BACK -> authenticate();
                 default -> printErrorMessage(WRONG_INPUT);
             }
         }
@@ -152,7 +174,7 @@ public class UIService {
 
     private void finishRegistration() {
         if (user.getInfo().getName() != null
-                && user.getInfo().getPassword() !=null) {
+                && user.getInfo().getPassword() != null) {
             userService.saveUser(user);
             isLogged = true;
         } else {
@@ -166,13 +188,21 @@ public class UIService {
         var username = bufferedReader.readLine();
         var password = bufferedReader.readLine();
         Optional<User> activeUser = userService.login(username, password);
+
         activeUser.ifPresentOrElse(
-                value -> user = value,
-                () -> printErrorMessage(FAIL_LOGIN));
+                value -> {
+                    user = value;
+                    isLogged = true;
+                },
+                () -> {
+                    printErrorMessage(FAIL_LOGIN);
+                    printInstructionMessage(AUTHENTICATION);
+                }
+        );
     }
 
     private void browseProfile() {
-        if (!isLogged) {
+        if (isLogged) {
             System.out.println(userService.showInfo(user));
         } else {
             printErrorMessage(BROWSE_ERROR);
