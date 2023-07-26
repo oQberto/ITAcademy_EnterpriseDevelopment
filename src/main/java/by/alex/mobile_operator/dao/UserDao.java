@@ -12,10 +12,15 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class UserDao implements CompanyController<User, Integer> {
     private static final UserDao INSTANCE = new UserDao();
+
     /**
      * The list works sa a database
      */
     private final List<User> users = new ArrayList<>();
+
+    /**
+     * A number similar to an "SERIAL" in a database.
+     */
     private Integer userId = 0;
 
     @Override
