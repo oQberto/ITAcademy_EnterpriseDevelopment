@@ -25,6 +25,14 @@ public class UserService {
         return userDao.save(user) != null;
     }
 
+    public String showInfo(User user) {
+        if (userDao.getById(user.getId()).isPresent()) {
+            return user.getInfo().toString();
+        } else {
+            return "There isn't a user";
+        }
+    }
+
     public static UserService getInstance() {
         return INSTANCE;
     }

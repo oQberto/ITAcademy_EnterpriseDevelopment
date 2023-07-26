@@ -40,6 +40,7 @@ public class UIService {
                 case "2" -> sortPlans();
                 case "3" -> connectPlanToAccount();
                 case "4" -> authenticate();
+                case "5" -> browseProfile();
                 case "6" -> logout();
                 case "exit" -> isActive = false;
                 default -> System.err.println("Wrong input! Check your data.");
@@ -195,6 +196,14 @@ public class UIService {
         activeUser.ifPresentOrElse(
                 value -> user = value,
                 () -> System.err.println("Wrong username or password! Try again or register."));
+    }
+
+    private void browseProfile() {
+        if (!isLogged) {
+            System.out.println(userService.showInfo(user));
+        } else {
+            System.out.println("If you want to browse a profile, you should login.");
+        }
     }
 
     private void logout() {
