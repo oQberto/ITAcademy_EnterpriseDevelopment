@@ -196,37 +196,4 @@ public class UIService {
                 value -> user = value,
                 () -> System.err.println("Wrong username or password! Try again or register."));
     }
-
-    @Deprecated
-    private PlanFilter buildplanFilter() throws IOException {
-        PlanType planType = null;
-        var subscriptionFeeFrom = Double.parseDouble(bufferedReader.readLine());
-        var subscriptionFeeTo = Double.parseDouble(bufferedReader.readLine());
-        String plan = bufferedReader.readLine();
-
-        if (plan.equalsIgnoreCase(PlanType.INTERNET.name())) {
-            planType = PlanType.INTERNET;
-        } else if (plan.equalsIgnoreCase(PlanType.PHONE.name())) {
-            planType = PlanType.PHONE;
-        } else if (plan.equalsIgnoreCase(PlanType.TV.name())) {
-            planType = PlanType.TV;
-        }
-
-        return PlanFilter.builder()
-                .subscriptionFeeFrom(subscriptionFeeFrom)
-                .subscriptionFeeTo(subscriptionFeeTo)
-                .planType(planType)
-                .build();
-    }
-
-    @Deprecated
-    private void showCatalogue() throws IOException {
-        System.out.println("Choose one: show catalogue/sort catalogue");
-        userInput = bufferedReader.readLine();
-        switch (userInput) {
-            case "show catalogue" -> browseCatalogueOfThePlans();
-            case "sort catalogue" -> sortPlans();
-            case "exit" -> isActive = false;
-        }
-    }
 }
