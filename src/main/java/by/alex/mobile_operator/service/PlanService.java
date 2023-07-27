@@ -52,7 +52,7 @@ public class PlanService {
         try {
             planDao.getAll().addAll(
                     new ObjectMapper().readValue(
-                            new String(Files.readAllBytes(Path.of("C:\\Users\\ermak\\IdeaProjects\\ITAcademy_EnterpriseDevelopment\\src\\main\\resources\\plan.json"))),
+                            new String(Files.readAllBytes(Path.of("src/main/resources/plan.json"))),
                             new TypeReference<>() {
                             }
                     )

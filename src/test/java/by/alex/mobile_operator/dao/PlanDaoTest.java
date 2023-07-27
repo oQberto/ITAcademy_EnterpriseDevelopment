@@ -27,7 +27,7 @@ class PlanDaoTest {
 
     @BeforeAll
     static void initTestData() throws IOException {
-        var testData = FileUtil.readFromFileToString("C:\\Users\\ermak\\IdeaProjects\\ITAcademy_EnterpriseDevelopment\\src\\test\\resources\\plan.json");
+        var testData = FileUtil.readFromFileToString("src/test/resources/plan.json");
         plans = MapperUtil.map(testData);
     }
 
