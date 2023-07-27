@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public class PlanDao implements CompanyController<Plan, Integer> {
+public class PlanDao implements DefaultDao<Plan, Integer> {
     private static final PlanDao INSTANCE = new PlanDao();
     /**
      * The list works as a database

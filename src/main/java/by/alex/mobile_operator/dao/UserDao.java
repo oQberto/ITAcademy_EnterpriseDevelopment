@@ -10,7 +10,7 @@ import java.util.Optional;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public class UserDao implements CompanyController<User, Integer> {
+public class UserDao implements DefaultDao<User, Integer> {
     private static final UserDao INSTANCE = new UserDao();
 
     /**
