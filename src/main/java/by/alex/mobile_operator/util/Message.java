@@ -71,6 +71,7 @@ public class Message {
         public static final String BROWSE_ERROR = "If you want to browse a profile, you should login.";
         public static final String LOGIN_ERROR = "You didn't login.";
         public static final String PLAN_NOT_EXISTS = "The plan doesn't exist. Check plan name";
+        public static final String REGISTRATION_ERROR = "If you want to register a new user, you will need to log out.";
     }
 
     public static void printInstructionMessage(String message) {

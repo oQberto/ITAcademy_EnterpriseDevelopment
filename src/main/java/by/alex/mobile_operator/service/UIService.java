@@ -134,10 +134,10 @@ public class UIService {
     }
 
     private void authenticate() throws IOException {
-        printInstructionMessage(AUTHENTICATION);
         isActiveAction = true;
 
         while (isActiveAction) {
+            printInstructionMessage(AUTHENTICATION);
             switch (bufferedReader.readLine()) {
                 case "1" -> login();
                 case "2" -> register();
@@ -148,10 +148,16 @@ public class UIService {
     }
 
     private void register() throws IOException {
+        if (isLogged) {
+            printErrorMessage(REGISTRATION_ERROR);
+            return;
+        }
+
         user = User.builder()
                 .info(new Info())
                 .build();
         printInstructionMessage(REGISTRATION);
+        isActiveAction = true;
 
         while (isActiveAction) {
             switch (bufferedReader.readLine()) {
@@ -165,7 +171,11 @@ public class UIService {
                         )
                 );
                 case "5" -> user.getInfo().setPassword(bufferedReader.readLine());
-                case "6" -> finishRegistration();
+                case "6" -> {
+                    finishRegistration();
+                    isActiveAction = false;
+                    start();
+                }
                 case BACK -> authenticate();
                 default -> printErrorMessage(WRONG_INPUT);
             }
@@ -196,7 +206,11 @@ public class UIService {
                 },
                 () -> {
                     printErrorMessage(FAIL_LOGIN);
-                    printInstructionMessage(AUTHENTICATION);
+                    try {
+                        authenticate();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
         );
     }

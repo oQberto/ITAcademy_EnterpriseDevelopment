@@ -13,6 +13,11 @@ public class UserService {
     private static final UserService INSTANCE = new UserService();
     private final UserDao userDao = UserDao.getInstance();
 
+    /**
+     * The variable works as a "SERIAL"
+     */
+    private Integer userId = 1;
+
     public boolean updateUser(User user) {
         return userDao.update(user);
     }
@@ -22,12 +27,13 @@ public class UserService {
     }
 
     public boolean saveUser(User user) {
+        user.setId(userId++);
         return userDao.save(user) != null;
     }
 
     public String showInfo(User user) {
         if (userDao.getById(user.getId()).isPresent()) {
-            return user.getInfo().toString();
+            return user.getInfo().toString() + user.getPlan();
         } else {
             return "There isn't a user";
         }
